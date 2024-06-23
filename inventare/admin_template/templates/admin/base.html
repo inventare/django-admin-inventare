@@ -18,9 +18,17 @@
   class="{% if is_popup %}popup {% endif %}{% block bodyclass %}{% endblock %}"
   data-admin-utc-offset="{% now "Z" %}"
 >
-  <!-- Container -->
-  <div id="container">
-    {% if not is_popup %}
+  <!-- MAIN -->
+  <div class="main" id="main" style="display: flex; flex-direction: row; align-items: stretch;">
+    {% if not is_popup and is_nav_sidebar_enabled %}
+      {% block nav-sidebar %}
+        {% include "admin/nav_sidebar.html" %}
+      {% endblock %}
+    {% endif %}
+    
+    <main id="content-start" class="content" tabindex="-1" style="flex: 1;">
+
+      {% if not is_popup %}
       <!-- Header -->
       {% block header %}
         <header id="header">
@@ -59,6 +67,7 @@
           {% block nav-global %}{% endblock %}
         </header>
       {% endblock %}
+      
       <!-- END Header -->
       {% block nav-breadcrumbs %}
         <nav aria-label="{% translate 'Breadcrumbs' %}">
@@ -71,14 +80,8 @@
         </nav>
       {% endblock %}
     {% endif %}
-
-    <div class="main" id="main" style="display: flex; flex-direction: row; align-items: stretch;">
-      {% if not is_popup and is_nav_sidebar_enabled %}
-        {% block nav-sidebar %}
-          {% include "admin/nav_sidebar.html" %}
-        {% endblock %}
-      {% endif %}
-      <main id="content-start" class="content" tabindex="-1" style="flex: 1;">
+      
+      <div class="container">
         {% block messages %}
           {% if messages %}
             <ul class="messagelist">{% for message in messages %}
@@ -98,12 +101,13 @@
           {% block sidebar %}{% endblock %}
         </div>
         <!-- END Content -->
-      </main>
-    </div>
-
-    <footer id="footer">{% block footer %}{% endblock %}</footer>
+      </div>
+    </main>
   </div>
-  <!-- END Container -->
+  <!-- END MAIN -->
+
+  <footer id="footer">{% block footer %}{% endblock %}</footer>
+  
   <script type="text/javascript" src="{% static 'inventare/js/inventare.js' %}"></script>
 </body>
 </html>

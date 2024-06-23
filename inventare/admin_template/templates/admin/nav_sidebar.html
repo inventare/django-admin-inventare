@@ -1,27 +1,31 @@
 {% load i18n %}
-<button
-  data-toggle="collapse"
-  data-target="#nav-sidebar"
-  aria-expanded="true"
-  aria-label="{% translate 'Toggle navigation' %}"
->
-  Auto Hide
-</button>
-
 <nav
   id="nav-sidebar"
   aria-label="{% translate 'Sidebar' %}"
-  class="collapse horizontal show"
-  style="background: #222 !important; width: 300px !important; position: fixed; left: 0; top: 0; bottom: 0;"
+  class="sidebar"
 >
-  <div style="width: 300px !important;">
-    <input
-      type="search"
-      id="nav-filter"
-      placeholder="{% translate 'Start typing to filter…' %}"
-      aria-label="{% translate 'Filter navigation items' %}"
-    />
+  <button
+    data-toggle="sidebar"
+    data-target="#nav-sidebar"
+    aria-expanded="true"
+    aria-label="{% translate 'Toggle navigation' %}"
+    class="sidebar-toggle"
+  ></button>
+
+  <div class="sidebar-inner">
+    <div class="branding">
+      
+    </div>
 
     {% include 'admin/nav_sidebar_app_list.html' with app_list=available_apps %}
+
+    <div style="flex: 1;"></div>
+
+    <form id="logout-form" method="post" action="{% url 'admin:logout' %}" style="display: flex; flex-direction: column; align-items: stretch;">
+      {% csrf_token %}
+      <button type="submit" class="btn primary btn-sidebar">
+        <span class="hide-on-collapse">{% translate 'Log out' %}</span>
+      </button>
+    </form>
   </div>
 </nav>

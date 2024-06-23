@@ -4,7 +4,7 @@
   {% url 'admin:index' as home_index %}
   {% is_on_admin_route home_index request as is_active %}
   <a href="{{ home_index }}" class="btn btn-sidebar primary {% if is_active %} active{% endif %}">
-    {% translate 'Home' %}
+    <span class="hide-on-collapse">{% translate 'Home' %}</span>
   </a>
 
   {% if app_list %}
@@ -20,7 +20,7 @@
             data-target="#sidebar-{{ app.app_label }}-{{ model_name }}"
             aria-expanded="{% if is_admin_expanded %}true{% else %}false{% endif %}"
           >
-            {{ model.name }}
+            <span class="hide-on-collapse">{{ model.name }}</span>
           </button>
           <div id="sidebar-{{ app.app_label }}-{{ model_name }}" class="collapse {% if is_admin_expanded %}show{% endif %}">
             <div style="display: flex; flex-direction: column; align-items: stretch;">
@@ -52,7 +52,5 @@
         {% endwith %}
       {% endfor %}
     {% endfor %}
-  {% else %}
-    <p>{% translate 'You don’t have permission to view or edit anything.' %}</p>
   {% endif %}
 </div>
