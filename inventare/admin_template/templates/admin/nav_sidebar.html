@@ -1,0 +1,27 @@
+{% load i18n %}
+<button
+  data-toggle="collapse"
+  data-target="#nav-sidebar"
+  aria-expanded="true"
+  aria-label="{% translate 'Toggle navigation' %}"
+>
+  Auto Hide
+</button>
+
+<nav
+  id="nav-sidebar"
+  aria-label="{% translate 'Sidebar' %}"
+  class="collapse horizontal show"
+  style="background: #222 !important; width: 300px !important; position: fixed; left: 0; top: 0; bottom: 0;"
+>
+  <div style="width: 300px !important;">
+    <input
+      type="search"
+      id="nav-filter"
+      placeholder="{% translate 'Start typing to filter…' %}"
+      aria-label="{% translate 'Filter navigation items' %}"
+    />
+
+    {% include 'admin/nav_sidebar_app_list.html' with app_list=available_apps %}
+  </div>
+</nav>

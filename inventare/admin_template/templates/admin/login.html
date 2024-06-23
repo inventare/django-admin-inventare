@@ -5,6 +5,7 @@
   {{ block.super }}
   {{ form.media }}
   <link rel="stylesheet" href="{% static "admin/css/login.css" %}" />
+  <script src="{% static "admin/js/hot-reload.js" %}"></script>
 {% endblock %}
 
 {% block bodyclass %}{{ block.super }} login{% endblock %}

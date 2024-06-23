@@ -1,0 +1,58 @@
+{% load i18n inventare_ds %}
+
+<div style="display: flex; flex-direction: column; align-items: stretch;">
+  {% url 'admin:index' as home_index %}
+  {% is_on_admin_route home_index request as is_active %}
+  <a href="{{ home_index }}" class="btn btn-sidebar primary {% if is_active %} active{% endif %}">
+    {% translate 'Home' %}
+  </a>
+
+  {% if app_list %}
+    {% for app in app_list %}
+
+      {% for model in app.models %}
+        {% with model_name=model.object_name|lower %}
+          {% is_on_admin_model model request as is_admin_expanded %}
+          <button
+            type="button"
+            class="btn btn-sidebar primary dropdown {% if is_admin_expanded %} active{% endif %}"
+            data-toggle="collapse"
+            data-target="#sidebar-{{ app.app_label }}-{{ model_name }}"
+            aria-expanded="{% if is_admin_expanded %}true{% else %}false{% endif %}"
+          >
+            {{ model.name }}
+          </button>
+          <div id="sidebar-{{ app.app_label }}-{{ model_name }}" class="collapse {% if is_admin_expanded %}show{% endif %}">
+            <div style="display: flex; flex-direction: column; align-items: stretch;">
+              {% if model.add_url %}
+                {% is_on_admin_route model.add_url request as is_active %}
+                <a
+                  href="{{ model.add_url }}"
+                  class="btn btn-sidebar primary child start {% if is_active %}active{% endif %}"
+                >
+                  {% translate 'Add' %}
+                </a>
+              {% endif %}
+
+              {% if model.admin_url %}
+                {% is_on_admin_route model.admin_url request as is_active %}
+                <a
+                  href="{{ model.admin_url }}"
+                  class="btn btn-sidebar primary child {% if is_active %}active{% endif %} {% if model.add_url %} end{% endif %}"
+                >
+                  {% if model.view_only %}
+                    {% translate 'View' %}
+                  {% else %}
+                    {% translate 'Change' %}
+                  {% endif %}
+                </a>
+              {% endif %}
+            </div>
+          </div>
+        {% endwith %}
+      {% endfor %}
+    {% endfor %}
+  {% else %}
+    <p>{% translate 'You don’t have permission to view or edit anything.' %}</p>
+  {% endif %}
+</div>
