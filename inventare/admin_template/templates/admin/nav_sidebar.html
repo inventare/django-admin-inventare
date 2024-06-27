@@ -1,4 +1,4 @@
-{% load i18n %}
+{% load i18n phosphoricons %}
 <nav
   id="nav-sidebar"
   aria-label="{% translate 'Sidebar' %}"
@@ -24,6 +24,7 @@
     <form id="logout-form" method="post" action="{% url 'admin:logout' %}" style="display: flex; flex-direction: column; align-items: stretch;">
       {% csrf_token %}
       <button type="submit" class="btn primary btn-sidebar">
+        {% phosphor 'sign-out' 'sidebar-icon' %}
         <span class="hide-on-collapse">{% translate 'Log out' %}</span>
       </button>
     </form>

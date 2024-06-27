@@ -31,6 +31,7 @@ ALLOWED_HOSTS = []
 # Application definition
 
 INSTALLED_APPS = [
+    'inventare.phosphoricons',
     'inventare.admin_template',
     'inventare.admin_site.apps.AdminSiteConfig',
     'django.contrib.auth',
@@ -122,3 +123,8 @@ STATIC_URL = 'static/'
 # https://docs.djangoproject.com/en/5.0/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+
+MODEL_ICONS = {
+    'auth.User': 'users',
+    'auth.Group': 'shield'
+}

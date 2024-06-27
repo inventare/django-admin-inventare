@@ -1,56 +1,61 @@
-{% load i18n inventare_ds %}
+{% load i18n inventare_ds phosphoricons %}
 
 <div style="display: flex; flex-direction: column; align-items: stretch;">
   {% url 'admin:index' as home_index %}
   {% is_on_admin_route home_index request as is_active %}
   <a href="{{ home_index }}" class="btn btn-sidebar primary {% if is_active %} active{% endif %}">
+    {% phosphor 'squares-four' 'sidebar-icon' %}
     <span class="hide-on-collapse">{% translate 'Home' %}</span>
   </a>
 
   {% if app_list %}
     {% for app in app_list %}
+      {% if app.models %}
+        <span class="sidebar-subheader">{{ app.name }}</span>
 
-      {% for model in app.models %}
-        {% with model_name=model.object_name|lower %}
-          {% is_on_admin_model model request as is_admin_expanded %}
-          <button
-            type="button"
-            class="btn btn-sidebar primary dropdown {% if is_admin_expanded %} active{% endif %}"
-            data-toggle="collapse"
-            data-target="#sidebar-{{ app.app_label }}-{{ model_name }}"
-            aria-expanded="{% if is_admin_expanded %}true{% else %}false{% endif %}"
-          >
-            <span class="hide-on-collapse">{{ model.name }}</span>
-          </button>
-          <div id="sidebar-{{ app.app_label }}-{{ model_name }}" class="collapse {% if is_admin_expanded %}show{% endif %}">
-            <div style="display: flex; flex-direction: column; align-items: stretch;">
-              {% if model.add_url %}
-                {% is_on_admin_route model.add_url request as is_active %}
-                <a
-                  href="{{ model.add_url }}"
-                  class="btn btn-sidebar primary child start {% if is_active %}active{% endif %}"
-                >
-                  {% translate 'Add' %}
-                </a>
-              {% endif %}
+        {% for model in app.models %}
+          {% with model_name=model.object_name|lower %}
+            {% is_on_admin_model model request as is_admin_expanded %}
+            <button
+              type="button"
+              class="btn btn-sidebar primary dropdown {% if is_admin_expanded %} active{% endif %}"
+              data-toggle="collapse"
+              data-target="#sidebar-{{ app.app_label }}-{{ model_name }}"
+              aria-expanded="{% if is_admin_expanded %}true{% else %}false{% endif %}"
+            >
+              {% model_icon_tag app.app_label model.object_name %}
+              <span class="hide-on-collapse">{{ model.name }}</span>
+            </button>
+            <div id="sidebar-{{ app.app_label }}-{{ model_name }}" class="collapse {% if is_admin_expanded %}show{% endif %}">
+              <div style="display: flex; flex-direction: column; align-items: stretch;">
+                {% if model.add_url %}
+                  {% is_on_admin_route model.add_url request as is_active %}
+                  <a
+                    href="{{ model.add_url }}"
+                    class="btn btn-sidebar primary child start {% if is_active %}active{% endif %}"
+                  >
+                    {% translate 'Add' %}
+                  </a>
+                {% endif %}
 
-              {% if model.admin_url %}
-                {% is_on_admin_route model.admin_url request as is_active %}
-                <a
-                  href="{{ model.admin_url }}"
-                  class="btn btn-sidebar primary child {% if is_active %}active{% endif %} {% if model.add_url %} end{% endif %}"
-                >
-                  {% if model.view_only %}
-                    {% translate 'View' %}
-                  {% else %}
-                    {% translate 'Change' %}
-                  {% endif %}
-                </a>
-              {% endif %}
+                {% if model.admin_url %}
+                  {% is_on_admin_route model.admin_url request as is_active %}
+                  <a
+                    href="{{ model.admin_url }}"
+                    class="btn btn-sidebar primary child {% if is_active %}active{% endif %} {% if model.add_url %} end{% endif %}"
+                  >
+                    {% if model.view_only %}
+                      {% translate 'View' %}
+                    {% else %}
+                      {% translate 'Change' %}
+                    {% endif %}
+                  </a>
+                {% endif %}
+              </div>
             </div>
-          </div>
-        {% endwith %}
-      {% endfor %}
+          {% endwith %}
+        {% endfor %}
+      {% endif %}
     {% endfor %}
   {% endif %}
 </div>
