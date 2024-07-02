@@ -11,7 +11,7 @@
   {% if app_list %}
     {% for app in app_list %}
       {% if app.models %}
-        <span class="sidebar-subheader">{{ app.name }}</span>
+        <span class="sidebar-label">{{ app.name }}</span>
 
         {% for model in app.models %}
           {% with model_name=model.object_name|lower %}

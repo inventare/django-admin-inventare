@@ -34,6 +34,9 @@ INSTALLED_APPS = [
     'inventare.phosphoricons',
     'inventare.admin_template',
     'inventare.admin_site.apps.AdminSiteConfig',
+    
+    'django_inventare_staticfiles',
+
     'django.contrib.auth',
     'django.contrib.contenttypes',
     'django.contrib.sessions',
@@ -50,6 +53,12 @@ MIDDLEWARE = [
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
 ]
+
+STATICFILES_FINDERS = (
+    "django.contrib.staticfiles.finders.FileSystemFinder",
+    "django.contrib.staticfiles.finders.AppDirectoriesFinder",
+    "django_inventare_staticfiles.finders.RemoteFileFinder",
+)
 
 ROOT_URLCONF = 'tests.urls'
 
