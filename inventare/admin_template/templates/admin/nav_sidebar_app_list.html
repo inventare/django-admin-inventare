@@ -8,53 +8,35 @@
     <span class="hide-on-collapse">{% translate 'Home' %}</span>
   </a>
 
+  <span class="sidebar-label">{% translate 'Applications' %}</span>
+
   {% if app_list %}
     {% for app in app_list %}
       {% if app.models %}
-        <span class="sidebar-label">{{ app.name }}</span>
-
-        {% for model in app.models %}
-          {% with model_name=model.object_name|lower %}
-            {% is_on_admin_model model request as is_admin_expanded %}
-            <button
-              type="button"
-              class="btn btn-sidebar primary dropdown {% if is_admin_expanded %} active{% endif %}"
-              data-toggle="collapse"
-              data-target="#sidebar-{{ app.app_label }}-{{ model_name }}"
-              aria-expanded="{% if is_admin_expanded %}true{% else %}false{% endif %}"
-            >
-              {% model_icon_tag app.app_label model.object_name %}
-              <span class="hide-on-collapse">{{ model.name }}</span>
-            </button>
-            <div id="sidebar-{{ app.app_label }}-{{ model_name }}" class="collapse {% if is_admin_expanded %}show{% endif %}">
-              <div style="display: flex; flex-direction: column; align-items: stretch;">
-                {% if model.add_url %}
-                  {% is_on_admin_route model.add_url request as is_active %}
-                  <a
-                    href="{{ model.add_url }}"
-                    class="btn btn-sidebar primary child start {% if is_active %}active{% endif %}"
-                  >
-                    {% translate 'Add' %}
-                  </a>
-                {% endif %}
-
-                {% if model.admin_url %}
-                  {% is_on_admin_route model.admin_url request as is_active %}
-                  <a
-                    href="{{ model.admin_url }}"
-                    class="btn btn-sidebar primary child {% if is_active %}active{% endif %} {% if model.add_url %} end{% endif %}"
-                  >
-                    {% if model.view_only %}
-                      {% translate 'View' %}
-                    {% else %}
-                      {% translate 'Change' %}
-                    {% endif %}
-                  </a>
-                {% endif %}
-              </div>
-            </div>
-          {% endwith %}
-        {% endfor %}
+        {% is_route_on_admin_app app request as is_admin_expanded %}
+        <button
+          type="button"
+          class="btn btn-sidebar primary dropdown {% if is_admin_expanded %} active{% endif %}"
+          data-toggle="collapse"
+          data-target="#sidebar-{{ app.app_label }}"
+          aria-expanded="{% if is_admin_expanded %}true{% else %}false{% endif %}"
+        >
+          {% app_icon_tag app.app_label %}
+          <span class="hide-on-collapse text-truncate">{{ app.name }}</span>
+        </button>
+        <div id="sidebar-{{ app.app_label }}" class="collapse {% if is_admin_expanded %}show{% endif %}">
+          <div style="display: flex; flex-direction: column; align-items: stretch;">
+            {% for model in app.models %}
+              {% is_route_on_admin_model model request as is_active %}
+              <a
+                href="{{ model.admin_url }}"
+                class="btn btn-sidebar primary child {% if forloop.first %}start{% endif %} {% if forloop.last %}end{% endif %} {% if is_active %}active{% endif %}"
+              >
+                {{ model.name }}
+              </a>
+            {% endfor %}
+          </div>
+        </div>
       {% endif %}
     {% endfor %}
   {% endif %}

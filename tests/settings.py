@@ -133,6 +133,10 @@ STATIC_URL = 'static/'
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
+APP_ICONS = {
+    'auth': 'user',
+}
+
 MODEL_ICONS = {
     'auth.User': 'users',
     'auth.Group': 'shield'

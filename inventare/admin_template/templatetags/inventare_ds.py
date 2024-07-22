@@ -21,7 +21,7 @@ def form_control(field: BoundField):
     return format_html('<div class="{}">{}{}{}</div>', " ".join(classes), field.label_tag(), field, help_text)
 
 @register.simple_tag
-def is_on_admin_model(model: dict, request: HttpRequest):
+def is_route_on_admin_model(model: dict, request: HttpRequest):
     ModelClass = model.get('model')
     info = (ModelClass._meta.app_label, ModelClass._meta.model_name)
     base_path = "/admin/%s/%s/" % info
@@ -38,6 +38,14 @@ def is_on_admin_model(model: dict, request: HttpRequest):
             continue
         return True
     
+    return False
+
+@register.simple_tag
+def is_route_on_admin_app(app: dict, request: HttpRequest):
+    for model in app.get('models'):
+        if not is_route_on_admin_model(model, request):
+            continue
+        return True
     return False
 
 @register.simple_tag

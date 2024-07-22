@@ -20,6 +20,8 @@
     {% include 'admin/nav_sidebar_app_list.html' with app_list=available_apps %}
 
     <div style="flex: 1;"></div>
+    
+    <span class="sidebar-label">{% translate 'Options' %}</span>
 
     <form id="logout-form" method="post" action="{% url 'admin:logout' %}" style="display: flex; flex-direction: column; align-items: stretch;">
       {% csrf_token %}

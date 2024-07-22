@@ -1,6 +1,5 @@
 html, body {
   min-block-size: 100vh;
-  background-color: red;
 }
 body {
   display: flex;
@@ -9,6 +8,5 @@ body {
 }
 #main {
   flex: 1;
-  background-color: yellow;
   display: flex;
 }

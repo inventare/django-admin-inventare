@@ -1,0 +1,22 @@
+{% load i18n phosphoricons %}
+
+{% if app_list %}
+  {% for app in app_list %}
+    <div class="app-{{ app.app_label }} module{% if app.app_url in request.path|urlencode %} current-app{% endif %}">
+      <h2 class="h4">{{ app.name }}</h2>
+
+      <div class="shortcuts">
+        {% for model in app.models %}
+          <a href="{{ model.admin_url }}" class="btn">
+            {% with model_name=model.object_name|lower %}
+              {% model_icon_tag app.app_label model.object_name %}
+            {% endwith %}
+            {{ model.name }}
+          </a>
+        {% endfor %}
+      </div>
+    </div>
+  {% endfor %}
+{% else %}
+  <p>{% translate 'You don’t have permission to view or edit anything.' %}</p>
+{% endif %}
