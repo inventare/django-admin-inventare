@@ -1,37 +1,42 @@
+INVENTARE_TOKENS = '0.0.6'
+INVENTARE_STYLES = '0.0.16'
+INVENTARE_JS = '0.0.6'
+INVENTARE_ICONS = '0.0.4'
+
 VENDOR_REMOTE_FILES = [
     (
         "inventare_tokens",
         "inventare/css/tokens.css",
-        "https://cdn.jsdelivr.net/npm/@inventare/tokens@0.0.6/dist/tokens.css",
+        f"https://cdn.jsdelivr.net/npm/@inventare/tokens@{INVENTARE_TOKENS}/dist/tokens.css",
     ),
     (
         "inventare_ds",
         "inventare/css/inventare.css",
-        "https://cdn.jsdelivr.net/npm/@inventare/styles@0.0.14/dist/inventare.css",
+        f"https://cdn.jsdelivr.net/npm/@inventare/styles@{INVENTARE_STYLES}/dist/inventare.css",
     ),
     (
         "inventare_js",
         "inventare/js/inventare.js",
-        "https://cdn.jsdelivr.net/npm/@inventare/vanilla@0.0.3/dist/index.js",
+        f"https://cdn.jsdelivr.net/npm/@inventare/vanilla@{INVENTARE_JS}/dist/index.js",
     ),
     (
         "inventare_icons_css",
         "inventare/css/icons.css",
-        "https://cdn.jsdelivr.net/npm/@inventare/icons@0.0.3/dist/icons.css",
+        f"https://cdn.jsdelivr.net/npm/@inventare/icons@{INVENTARE_ICONS}/dist/icons.css",
     ),
     (
         "inventare_icons_ttf",
         "inventare/css/icons.ttf",
-        "https://cdn.jsdelivr.net/npm/@inventare/icons@0.0.3/dist/icons.ttf",
+        f"https://cdn.jsdelivr.net/npm/@inventare/icons@{INVENTARE_ICONS}/dist/icons.ttf",
     ),
     (
         "inventare_icons_woff",
         "inventare/css/icons.woff",
-        "https://cdn.jsdelivr.net/npm/@inventare/icons@0.0.3/dist/icons.woff",
+        f"https://cdn.jsdelivr.net/npm/@inventare/icons@{INVENTARE_ICONS}/dist/icons.woff",
     ),
     (
         "inventare_icons_woff2",
         "inventare/css/icons.woff2",
-        "https://cdn.jsdelivr.net/npm/@inventare/icons@0.0.3/dist/icons.woff2",
+        f"https://cdn.jsdelivr.net/npm/@inventare/icons@{INVENTARE_ICONS}/dist/icons.woff2",
     ),
 ]

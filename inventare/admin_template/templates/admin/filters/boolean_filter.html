@@ -1,0 +1,34 @@
+{% load inventare_ds %}
+<div class="form-control">
+  <label for="">{{ title }}</label>
+
+  <div class="select-container" id="{{ spec.lookup_kwarg }}">
+    <input
+      class="default-control"
+      type="hidden"
+      name="{{ spec.lookup_kwarg }}"
+      value="{% if not spec.lookup_val2 %}{{ spec.lookup_val }}{% else %}null{% endif %}"
+    />
+
+    <div class="select input" role="combobox" tabindex="0" aria-haspopup="true" aria-expanded="false" aria-disabled="false" aria-controls="select-display">
+      <span class="select-value" role="textbox" aria-readonly="true" id="select-display">{% get_active_display choices %}</span>
+      <button type="button" class="dropdown-button" role="presentation">
+        <i class="icon-caret-down arrow" role="presentation"></i>
+      </button>
+    </div>
+
+    <div class="select-dropdown">
+      <div class="select-dropdown-inner">
+        {% for choice in choices %}
+          <button
+            data-value="{{ choice.value }}"
+            class="select-item {% if choice.selected %}active{% endif %}"
+            type="button"
+          >
+            {{ choice.display }}
+          </button>
+        {% endfor %}
+      </div>
+    </div>
+  </div>
+</div>

@@ -3,6 +3,7 @@ from django.contrib.admin import site
 from django.forms.boundfield import BoundField
 from django.utils.html import format_html
 from django.http import HttpRequest
+from django.utils.translation import gettext_lazy as _
 
 register = template.Library()
 
@@ -51,3 +52,10 @@ def is_route_on_admin_app(app: dict, request: HttpRequest):
 @register.simple_tag
 def is_on_admin_route(url: str, request: HttpRequest):
     return url == request.path
+
+@register.simple_tag
+def get_active_display(choices: dict):
+    choices = list(filter(lambda item: item.get('selected'), choices))
+    if not choices:
+        return _('select')
+    return choices[0].get('display')
