@@ -4,6 +4,8 @@ from django.forms.boundfield import BoundField
 from django.utils.html import format_html
 from django.http import HttpRequest
 from django.utils.translation import gettext_lazy as _
+from django.contrib.admin.views.main import PAGE_VAR
+from django.utils.safestring import mark_safe
 
 register = template.Library()
 
@@ -58,4 +60,24 @@ def get_active_display(choices: dict):
     choices = list(filter(lambda item: item.get('selected'), choices))
     if not choices:
         return _('select')
+    if choices[0].get('inline_display'):
+        return choices[0].get('inline_display')
     return choices[0].get('display')
+
+@register.simple_tag
+def paginator_number(cl, i):
+    """
+    Generate an individual page index link in a paginated list.
+    """
+    if i == cl.paginator.ELLIPSIS:
+        return format_html("{} ", cl.paginator.ELLIPSIS)
+    elif i == cl.page_num:
+        return format_html('<span class="this-page">{}</span> ', i)
+    else:
+        pagination_template = '<a href="#" hx-post="./table/{}" hx-params="csrfmiddlewaretoken" hx-target="#changelist" hx-swap="outerHTML" hx-indicator="#changelist-indicator" {}>{}</a> '
+        return format_html(
+            pagination_template,
+            cl.get_query_string({PAGE_VAR: i}),
+            mark_safe(' class="end"' if i == cl.paginator.num_pages else ""),
+            i,
+        )

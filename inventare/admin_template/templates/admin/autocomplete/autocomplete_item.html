@@ -1,0 +1,13 @@
+<button
+  data-value="{{ item.pk }}"
+  class="select-item"
+  type="button"
+  {% if forloop.last and page_obj.has_next %}
+    hx-get="{% url 'admin:htmx-autocomplete' %}?app_label={{ app_label }}&model_name={{ model_name }}&field_name={{ field_name }}&page={{ page_obj.next_page_number }}"
+    hx-trigger="intersect once"
+    hx-target="this"
+    hx-swap="afterend"
+  {% endif %}
+>
+  {{ item }}
+</button>

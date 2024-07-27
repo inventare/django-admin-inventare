@@ -49,54 +49,43 @@
     {% endblock %}
 
     {% block filters %}
-      {% if cl.has_filters %}
-        <nav id="changelist-filter" aria-labelledby="changelist-filter-header">
-          <div>
-            TODO: corrigir a posição disso aqui
-          </div>
-          <div>
-            {% block search %}{% search_form cl %}{% endblock %}
-          </div>
-          <form
-            method="get"
-            hx-get="./table/"
-            hx-target="#changelist"
-            hx-swap="outerHTML"
-            novalidate
-          >
-            <div>
-              TODO: corrigir a posição disso aqui
-            </div>
-            <div>
-              {% block date_hierarchy %}{% if cl.date_hierarchy %}{% date_hierarchy cl %}{% endif %}{% endblock %}
-            </div>
+      <nav id="changelist-filter" aria-labelledby="changelist-filter-header">
+        <form
+          hx-post="./table/"
+          hx-target="#changelist"
+          hx-swap="outerHTML"
+          hx-indicator="#changelist-indicator"
+        >{% csrf_token %}
+          {% block search %}{% search_form cl %}{% endblock %}
 
+          {% if cl.has_filters %}
             {% for spec in cl.filter_specs %}{% admin_list_filter cl spec %}{% endfor %}
-            
-            <button type="submit" class="btn primary">Aplicar</button>
-
-            {% if cl.has_active_filters %}
-              <div id="changelist-filter-extra-actions">
-                <h3>
-                  <a href="{{ cl.clear_all_filters_qs }}">&#10006; {% translate "Clear all filters" %}</a>
-                </h3>
-              </div>
-            {% endif %}
-          </form>
-        </nav>
-      {% endif %}
+          {% endif %}
+          
+          {% if cl.has_active_filters %}
+            <div id="changelist-filter-extra-actions">
+              <h3>
+                <a href="{{ cl.clear_all_filters_qs }}">&#10006; {% translate "Clear all filters" %}</a>
+              </h3>
+            </div>
+          {% endif %}
+        </form>
+      </nav>
     {% endblock %}
 
     {% if cl.formset and cl.formset.errors %}
-        <p class="errornote">
+      <p class="errornote">
         {% blocktranslate count counter=cl.formset.total_error_count %}Please correct the error below.{% plural %}Please correct the errors below.{% endblocktranslate %}
-        </p>
-        {{ cl.formset.non_form_errors }}
+      </p>
+      {{ cl.formset.non_form_errors }}
     {% endif %}
-    
+      
+    <div class="htmx-indicator" id="changelist-indicator">
+      Carregando...
+    </div>
 
     {% block result_list %}
       {% include 'admin/change_list_table.html' %}
     {% endblock %}
-  
+  </div>
 {% endblock %}

@@ -4,6 +4,7 @@ from django.contrib import admin
 from django.contrib.admin import helpers
 from django.contrib.admin.options import IncorrectLookupParameters
 from django.http import HttpResponseRedirect
+from django.urls import reverse
 from django.urls.resolvers import URLPattern
 from django.utils.decorators import method_decorator
 from django.views.decorators.csrf import csrf_protect
@@ -11,11 +12,13 @@ from django.template.response import SimpleTemplateResponse, TemplateResponse
 from django.core.exceptions import PermissionDenied
 from django.utils.translation import gettext as _
 from django.utils.translation import ngettext
+from django.contrib.admin.views.main import PAGE_VAR
 
 csrf_protect_m = method_decorator(csrf_protect)
 
 class ModelAdmin(admin.ModelAdmin):
     change_list_table_template = None
+    list_per_page = 2
 
     def get_urls(self) -> list[URLPattern]:
         from django.urls import path
@@ -33,6 +36,17 @@ class ModelAdmin(admin.ModelAdmin):
             path("table/", wrap(self.changelist_table_view), name="%s_%s_changelist_table" % info),
         ] + super().get_urls()
     
+    def _post_to_get(self, request):
+        request.GET._mutable = True
+        SKIP_FIELDS = ["csrfmiddlewaretoken", "action", "select_across"]
+
+        for item in request.POST:
+            if item in SKIP_FIELDS:
+                continue
+            request.GET[item] = request.POST.get(item)
+
+        request.GET._mutable = False
+    
     @csrf_protect_m
     def changelist_table_view(self, request, extra_context=None):
         """
@@ -43,10 +57,13 @@ class ModelAdmin(admin.ModelAdmin):
         app_label = self.opts.app_label
         if not self.has_view_or_change_permission(request):
             raise PermissionDenied
+        
+        self._post_to_get(request)
 
         try:
             cl = self.get_changelist_instance(request)
-        except IncorrectLookupParameters:
+        except IncorrectLookupParameters as e:
+            print(e)
             # Wacky lookup parameters were given, so redirect to the main
             # changelist page, without parameters, and pass an 'invalid=1'
             # parameter via the query string. If wacky parameters were given
@@ -61,7 +78,7 @@ class ModelAdmin(admin.ModelAdmin):
                     },
                 )
             return HttpResponseRedirect(request.path + "?" + ERROR_FLAG + "=1")
-
+        
         # If the request was POSTed, this might be a bulk action or a bulk
         # edit. Try to look up an action or confirmation first, but if this
         # isn't an action the POST will fall through to the bulk edit check,
@@ -177,6 +194,14 @@ class ModelAdmin(admin.ModelAdmin):
             ],
             context,
         )
-        print(response)
+
+        redirect_url_query = cl.get_query_string()
+        if cl.page_num != 1:
+            redirect_url_query = cl.get_query_string({ PAGE_VAR: cl.page_num })
+
+        full_url = reverse('admin:%s_%s_changelist' % (app_label, self.opts.model_name))
+
+        # TODO: use django-htmx-utils
+        response.headers['HX-Push-Url'] = f"{full_url}{redirect_url_query}"
 
         return response

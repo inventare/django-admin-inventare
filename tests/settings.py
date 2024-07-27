@@ -143,3 +143,26 @@ MODEL_ICONS = {
     'auth.User': 'users',
     'auth.Group': 'shield'
 }
+
+LOGGING = {
+    'version': 1,
+    'handlers': {
+        'console': {
+            'class': 'logging.StreamHandler',
+        },
+    },
+    'loggers': {
+        "django": {
+            "handlers": ["console"],
+            "level": "INFO",
+            "propagate": False,
+        },
+        'django.db.backends': {
+            'level': 'DEBUG',
+        },
+    },
+    'root': {
+        'handlers': ['console'],
+    }
+}
+
