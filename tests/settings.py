@@ -144,6 +144,7 @@ MODEL_ICONS = {
     'auth.Group': 'shield'
 }
 
+"""
 LOGGING = {
     'version': 1,
     'handlers': {
@@ -166,3 +167,4 @@ LOGGING = {
     }
 }
 
+"""

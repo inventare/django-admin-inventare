@@ -127,7 +127,7 @@ class RelatedFieldListFilter(filters.FieldListFilter):
             self.lookup_title = self.other_model._meta.verbose_name
         self.title = self.lookup_title
         self.empty_value_display = model_admin.get_empty_value_display()
-    
+
     def expected_parameters(self):
         return [self.lookup_kwarg]
     
@@ -140,7 +140,7 @@ class RelatedFieldListFilter(filters.FieldListFilter):
         return self.field.null or (self.field.is_relation and self.field.many_to_many)
 
     def choices(self, changelist):
-        if self.lookup_val:
+        if self.lookup_val and self.lookup_val[0]:
             try:
                 instance = self.other_model._default_manager.get(pk=self.lookup_val[0])
             except self.other_model.DoesNotExist as e:
@@ -154,6 +154,18 @@ class RelatedFieldListFilter(filters.FieldListFilter):
                 }
             ]
         return []
+    
+    def queryset(self, request, queryset):
+        if not self.lookup_val or not self.lookup_val[0]:
+            return queryset
+        
+        try:
+            q_object = build_q_object_from_lookup_parameters(self.used_parameters)
+            return queryset.filter(q_object)
+        except (ValueError, ValidationError) as e:
+            # Fields may raise a ValueError or ValidationError when converting
+            # the parameters to the correct type.
+            raise IncorrectLookupParameters(e)
 
 filters.FieldListFilter.register(
     lambda f: f.remote_field,

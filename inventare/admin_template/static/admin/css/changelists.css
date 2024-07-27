@@ -1,5 +1,5 @@
 #changelist-filter {
-  background-color: red;
+  margin: 20px 0;
 }
 
 #changelist-filter form {
@@ -8,8 +8,23 @@
   gap: 16px;
 }
 
+@media (max-width: 1200px) {
+  #changelist-filter form {
+    grid-template-columns: repeat(3, 1fr);
+  }
+}
 
+@media (max-width: 992px) {
+  #changelist-filter form {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
 
+@media (max-width: 768px) {
+  #changelist-filter form {
+    grid-template-columns: repeat(1, 1fr);
+  }
+}
 
 .htmx-indicator{
   display:none;

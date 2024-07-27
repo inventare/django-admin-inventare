@@ -6,6 +6,7 @@ from .models import Client, Address
 class AddressAdmin(ModelAdmin):
     list_display = ['id', 'street']
     search_fields = ['street']
+    ordering = ['street']
 
 @admin.register(Client)
 class ClientAdmin(ModelAdmin):
