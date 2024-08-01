@@ -53,28 +53,18 @@ class SelectBooleanFilter(filters.FieldListFilter):
             # the parameters to the correct type.
             raise IncorrectLookupParameters(e)
 
-    def get_facet_counts(self, pk_attname, filtered_qs):
-        return {
-            "true__c": models.Count(
-                pk_attname, filter=models.Q(**{self.field_path: True})
-            ),
-            "false__c": models.Count(
-                pk_attname, filter=models.Q(**{self.field_path: False})
-            ),
-            "null__c": models.Count(
-                pk_attname, filter=models.Q(**{self.lookup_kwarg2: True})
-            ),
-        }
-    
     def choices(self, changelist):
         # FIXME: remove the query_string property
 
         field_choices = dict(self.field.flatchoices)
-        for lookup, title, count_field in (
-            (None, _("All"), None),
-            ("1", field_choices.get(True, _("Yes")), "true__c"),
-            ("0", field_choices.get(False, _("No")), "false__c"),
+        for lookup, title in (
+            (None, _("All")),
+            ("1", field_choices.get(True, _("Yes"))),
+            ("0", field_choices.get(False, _("No"))),
         ):
+            inline_display = title
+            if not lookup:
+                inline_display = _('Filter by %s') % self.title
             yield {
                 "selected": self.lookup_val == lookup and not self.lookup_val2,
                 "value": lookup or "",
@@ -82,7 +72,7 @@ class SelectBooleanFilter(filters.FieldListFilter):
                     {self.lookup_kwarg: lookup}, [self.lookup_kwarg2]
                 ),
                 "display": title,
-                'inline_display': title if lookup else self.title,
+                'inline_display': inline_display,
             }
         #FIXME: continue here!!!!!!!!!
         if self.field.null:

@@ -1,10 +1,9 @@
 from functools import update_wrapper
 from django.contrib import messages
-from django.contrib import admin
 from django.contrib.admin import helpers
 from django.contrib.admin.options import IncorrectLookupParameters
 from django.http import HttpResponseRedirect
-from django.urls import reverse
+from django.urls import reverse, path
 from django.urls.resolvers import URLPattern
 from django.utils.decorators import method_decorator
 from django.views.decorators.csrf import csrf_protect
@@ -16,26 +15,22 @@ from django.contrib.admin.views.main import PAGE_VAR
 
 csrf_protect_m = method_decorator(csrf_protect)
 
-class ModelAdmin(admin.ModelAdmin):
+class HTMXModelAdminMixin:
     change_list_table_template = None
-    list_per_page = 2
 
-    def get_urls(self) -> list[URLPattern]:
-        from django.urls import path
+    def wrap(self, view):
+        def wrapper(*args, **kwargs):
+            return self.admin_site.admin_view(view)(*args, **kwargs)
 
-        def wrap(view):
-            def wrapper(*args, **kwargs):
-                return self.admin_site.admin_view(view)(*args, **kwargs)
+        wrapper.model_admin = self
+        return update_wrapper(wrapper, view)
 
-            wrapper.model_admin = self
-            return update_wrapper(wrapper, view)
-
+    def get_htmx_urls(self) -> list[URLPattern]:
         info = self.opts.app_label, self.opts.model_name
-
         return [
-            path("table/", wrap(self.changelist_table_view), name="%s_%s_changelist_table" % info),
-        ] + super().get_urls()
-    
+            path("table/", self.wrap(self.changelist_table_view), name="%s_%s_changelist_table" % info),
+        ]
+
     def _post_to_get(self, request):
         request.GET._mutable = True
         SKIP_FIELDS = ["csrfmiddlewaretoken", "action", "select_across"]
@@ -46,7 +41,7 @@ class ModelAdmin(admin.ModelAdmin):
             request.GET[item] = request.POST.get(item)
 
         request.GET._mutable = False
-    
+
     @csrf_protect_m
     def changelist_table_view(self, request, extra_context=None):
         """

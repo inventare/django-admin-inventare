@@ -24,3 +24,4 @@ class AdminSite(admin.AdminSite):
 
     def autocomplete_view(self, request):
         return HTMXAutocompleteView.as_view(admin_site=self)(request)
+    

@@ -11,7 +11,7 @@ class Address(models.Model):
         verbose_name_plural = 'addresses'
 
 class Client(models.Model):
-    name = models.CharField(max_length=250)
+    name = models.CharField(max_length=250, help_text='the client name')
     is_usable = models.BooleanField(null=True)
     birth_date = models.DateField()
 

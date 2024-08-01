@@ -1,6 +1,11 @@
 html, body {
   min-block-size: 100vh;
 }
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
 body {
   display: flex;
   flex-direction: column;
@@ -9,4 +14,31 @@ body {
 #main {
   flex: 1;
   display: flex;
+}
+
+.app-list {
+  margin: 25px 0;
+}
+.app-list h2 {
+  margin-bottom: 10px;
+}
+
+.title-block {
+  display: flex;
+  flex-direction: row;
+  align-items: stretch;
+  margin-top: var(--spacing-xlarge);
+  margin-bottom: var(--spacing-xgiant);
+}
+.title-block .title-lines {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: stretch;
+}
+.title-block .object-tools {
+  display: flex;
+  flex-direction: column;
+  align-items: stretch;
+  max-width: 200px;
 }

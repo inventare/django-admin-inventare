@@ -2,7 +2,7 @@
 
 {% if app_list %}
   {% for app in app_list %}
-    <div class="app-{{ app.app_label }} module{% if app.app_url in request.path|urlencode %} current-app{% endif %}">
+    <div class="app-list app-{{ app.app_label }} module{% if app.app_url in request.path|urlencode %} current-app{% endif %}">
       <h2 class="h4">{{ app.name }}</h2>
 
       <div class="shortcuts" style="display: grid; grid-template-columns: repeat(4, 1fr); gap: 16px;">

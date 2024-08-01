@@ -1,5 +1,6 @@
 from django import template
 from django.contrib.admin import site
+from django.contrib.admin.helpers import AdminField
 from django.forms.boundfield import BoundField
 from django.utils.html import format_html
 from django.http import HttpRequest
@@ -81,3 +82,12 @@ def paginator_number(cl, i):
             mark_safe(' class="end"' if i == cl.paginator.num_pages else ""),
             i,
         )
+    
+@register.simple_tag
+def get_error_message(field: AdminField):
+    if (not field.field):
+        return None
+    if not field.field.errors:
+        return None
+    errors = list(field.field.errors)
+    return errors[0]
