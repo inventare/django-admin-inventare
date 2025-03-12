@@ -67,14 +67,6 @@
       {% endif %}
       
       <div class="container">
-        {% block messages %}
-          {% if messages %}
-            {% for message in messages %}
-              <div class="alert {{ message.tags }}" role="alert">{{ message|capfirst }}</div>
-            {% endfor %}
-          {% endif %}
-        {% endblock messages %}
-
         {% if not is_popup %}
           {% block nav-breadcrumbs %}
             <nav aria-label="{% translate 'Breadcrumbs' %}">
@@ -87,6 +79,14 @@
             </nav>
           {% endblock %}
         {% endif %}
+
+        {% block messages %}
+          {% if messages %}
+            {% for message in messages %}
+              <div class="alert {{ message.tags }}" role="alert">{{ message|capfirst }}</div>
+            {% endfor %}
+          {% endif %}
+        {% endblock messages %}
 
         <!-- Content -->
         <div id="content" class="{% block coltype %}colM{% endblock %}">
