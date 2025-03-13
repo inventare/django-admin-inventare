@@ -17,7 +17,9 @@
     />
 
     <div class="select input" role="combobox" tabindex="0" aria-haspopup="true" aria-expanded="false" aria-disabled="false" aria-controls="select-display">
-      <span class="select-value" role="textbox" aria-readonly="true" id="select-display">{% get_active_display choices %}</span>
+      <span class="select-value" role="textbox" aria-readonly="true" id="select-display">
+        {% get_active_display choices %}
+      </span>
       <button type="button" class="dropdown-button" role="presentation">
         <i class="icon-caret-down arrow" role="presentation"></i>
       </button>

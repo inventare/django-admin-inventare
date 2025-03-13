@@ -143,7 +143,13 @@ class RelatedFieldListFilter(filters.FieldListFilter):
                     "display": str(instance),
                 }
             ]
-        return []
+        return [
+            {
+                "selected": True,
+                "query_string": changelist.get_query_string({self.lookup_kwarg: ''}),
+                "display": _("Filter by %(model)s" % { 'model': self.title }),
+            }
+        ]
     
     def queryset(self, request, queryset):
         if not self.lookup_val or not self.lookup_val[0]:
