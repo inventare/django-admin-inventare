@@ -8,6 +8,26 @@
   gap: 16px;
 }
 
+.autocomplete-skeleton-container {
+  display: none;
+}
+.htmx-request .autocomplete-skeleton-container{
+  display: block;
+}
+.htmx-request.autocomplete-skeleton-container{
+  display: block;
+}
+.autocomplete-skeleton-container > div {
+  display: flex;
+  flex-direction: column;
+  align-items: stretch;
+  gap: var(--spacing-xxsmall);
+}
+.autocomplete-skeleton {
+  width: '100%';
+  height: 24px;
+}
+
 @media (max-width: 1200px) {
   #changelist-filter form {
     grid-template-columns: repeat(3, 1fr);
