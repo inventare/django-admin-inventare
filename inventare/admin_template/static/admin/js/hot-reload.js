@@ -1,3 +1,4 @@
+/*
 document.addEventListener('DOMContentLoaded', function(){
   function openWS() {
     const ws = new WebSocket('ws://localhost:9002');
@@ -28,3 +29,4 @@ document.addEventListener('DOMContentLoaded', function(){
 
   openWS();
 });
+*/

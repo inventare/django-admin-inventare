@@ -1,0 +1,18 @@
+{% extends "admin/login.html" %}
+{% load i18n %}
+
+{% block login_content %}
+  <div class="logged-out-text">
+    <p>{% translate "Thanks for spending some quality time with the web site today." %}</p>
+
+    <div class="logged-out-footer">
+      <a href="{% url 'admin:index' %}" class="btn primary">{% translate 'Log in again' %}</a>
+    </div>
+  </div>
+{% endblock %}
+
+{% block brand_content %}
+  {% include 'registration/logged_out_brand_image.html' %}
+
+  <a href="https://storyset.com/business" class="brand-block-credits">Business illustrations by Storyset</a>
+{% endblock %}

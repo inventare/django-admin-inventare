@@ -20,14 +20,14 @@
   data-admin-utc-offset="{% now "Z" %}"
 >
   <!-- MAIN -->
-  <div class="main" id="main" style="display: flex; flex-direction: row; align-items: stretch;">
+  <div class="main" id="main" style="display: flex; flex-direction: row; align-items: stretch; overflow: hidden; max-height: 100vh;">
     {% if not is_popup and is_nav_sidebar_enabled %}
       {% block nav-sidebar %}
         {% include "admin/nav_sidebar.html" %}
       {% endblock %}
     {% endif %}
     
-    <main id="content-start" class="content" tabindex="-1" style="flex: 1;">
+    <main id="content-start" class="content" tabindex="-1" style="flex: 1; overflow-y: auto">
       {% if not is_popup %}
         <!-- Header -->
         {% block header %}
@@ -66,7 +66,7 @@
         <!-- END Header -->
       {% endif %}
       
-      <div class="container">
+      <div class="{% block container_class %}container{% endblock %}">
         {% if not is_popup %}
           {% block nav-breadcrumbs %}
             <nav aria-label="{% translate 'Breadcrumbs' %}">
@@ -100,10 +100,12 @@
               {% block object-tools %}{% endblock %}
             </div>
           </div>
-          {% block content %}
-            {{ content }}
-          {% endblock %}
-          {% block sidebar %}{% endblock %}
+          <div id="content-row">
+            {% block content %}
+              {{ content }}
+            {% endblock %}
+            {% block sidebar %}{% endblock %}
+          </div>
         </div>
         <!-- END Content -->
       </div>

@@ -1,12 +1,21 @@
 from django.contrib import admin
 from inventare.admin_template.admin import ModelAdmin
-from .models import Client, Address
+from .models import Client, Address, ClientPhone
+
+@admin.register(ClientPhone)
+class ClientPhoneAdmin(ModelAdmin):
+    list_display = ['id', 'client', 'phone']
+    list_display_links = ['id', 'client', 'phone']
 
 @admin.register(Address)
 class AddressAdmin(ModelAdmin):
     list_display = ['id', 'street']
     search_fields = ['street']
     ordering = ['street']
+
+class ClientPhoneInlineAdmin(admin.TabularInline):
+    model = ClientPhone
+    extra = 0
 
 @admin.register(Client)
 class ClientAdmin(ModelAdmin):
@@ -16,3 +25,5 @@ class ClientAdmin(ModelAdmin):
     list_editable = ['name', 'is_usable']
     search_fields = ['name']
     date_hierarchy = 'birth_date'
+
+    inlines = [ClientPhoneInlineAdmin]

@@ -23,6 +23,19 @@ body {
   margin-bottom: 10px;
 }
 
+#content-row {
+  display: flex;
+  flex-direction: row;
+  align-items: stretch;
+  gap: var(--spacing-base);
+}
+#content-row #content-main {
+  flex: 1;
+}
+#content-row #content-related {
+  width: 400px;
+}
+
 .title-block {
   display: flex;
   flex-direction: row;
@@ -41,4 +54,68 @@ body {
   flex-direction: column;
   align-items: stretch;
   max-width: 200px;
+}
+
+
+#recent-actions .actionlist {
+  display: flex;
+  flex-direction: column;
+  align-items: stretch;
+}
+#recent-actions .actionlist li > .action-entry {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  
+  gap: var(--spacing-small);
+  padding: var(--spacing-xsmall);
+  border-radius: var(--border-radius-medium);
+  transition: background 0.3s ease;
+
+  text-decoration: none;
+  color: var(--color-gray-900);
+  font-weight: var(--font-weight-medium);
+}
+#recent-actions .actionlist li:hover {
+  background-color: var(--color-gray-50);
+}
+#recent-actions .actionlist li .icon {
+  display: block;
+  width: 28px;
+  height: 28px;
+  border-radius: var(--border-radius-circle);
+  background: var(--color-gray-50);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  border: 1px solid var(--color-gray-100);
+  transition: background 0.3s ease;
+}
+#recent-actions .actionlist li:hover .icon {
+  background-color: var(--color-white);
+}
+#recent-actions .actionlist li.add .icon {
+  color: var(--color-success-500);
+}
+#recent-actions .actionlist li.delete .icon {
+  color: var(--color-danger-500);
+}
+#recent-actions .actionlist li .icon i {
+  font-size: 16px;
+}
+#recent-actions .actionlist li .content-description {
+  flex: 1;
+
+  display: flex;
+  flex-direction: row;
+  justify-content: stretch;
+}
+#recent-actions .actionlist li .content-description .fill-text {
+  flex: 1;
+}
+#recent-actions .actionlist li .content-title {
+  font-size: var(--font-size-small);
+  padding: var(--spacing-xxsmall);
+  font-weight: var(--font-weight-regular);
 }

@@ -23,3 +23,14 @@ class Client(models.Model):
     class Meta:
         verbose_name = 'client'
         verbose_name_plural = 'clients'
+
+class ClientPhone(models.Model):
+    client = models.ForeignKey(Client, on_delete=models.CASCADE)
+    phone = models.CharField(max_length=11)
+
+    def __str__(self):
+        return self.phone
+    
+    class Meta:
+        verbose_name = 'client phone'
+        verbose_name_plural = 'client phones'

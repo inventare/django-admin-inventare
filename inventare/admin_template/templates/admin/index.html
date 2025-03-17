@@ -1,5 +1,5 @@
 {% extends "admin/base_site.html" %}
-{% load i18n static %}
+{% load i18n static phosphoricons %}
 
 {% block extrastyle %}{{ block.super }}<link rel="stylesheet" href="{% static "admin/css/dashboard.css" %}">{% endblock %}
 
@@ -16,61 +16,58 @@
 {% endblock %}
 
 {% block sidebar %}
-<div id="content-related">
-    <div class="module" id="recent-actions-module">
-        <h2>{% translate 'Recent actions' %}</h2>
-        <h3>{% translate 'My actions' %}</h3>
-            {% load log %}
-            {% get_admin_log 10 as admin_log for_user user %}
-            {% if not admin_log %}
-            <p>{% translate 'None available' %}</p>
-            {% else %}
-            <ul class="actionlist">
-            {% for entry in admin_log %}
-            <li class="{% if entry.is_addition %}addlink{% endif %}{% if entry.is_change %}changelink{% endif %}{% if entry.is_deletion %}deletelink{% endif %}">
-                <span class="visually-hidden">{% if entry.is_addition %}{% translate 'Added:' %}{% elif entry.is_change %}{% translate 'Changed:' %}{% elif entry.is_deletion %}{% translate 'Deleted:' %}{% endif %}</span>
-                {% if entry.is_deletion or not entry.get_admin_url %}
-                    {{ entry.object_repr }}
-                {% else %}
-                    <a href="{{ entry.get_admin_url }}">{{ entry.object_repr }}</a>
-                {% endif %}
-                <br>
-                {% if entry.content_type %}
-                    <span class="mini quiet">{% filter capfirst %}{{ entry.content_type.name }}{% endfilter %}</span>
-                {% else %}
-                    <span class="mini quiet">{% translate 'Unknown content' %}</span>
-                {% endif %}
-            </li>
-            {% endfor %}
-            </ul>
-            {% endif %}
-    </div>
-</div>
-
-<div class="modal modal-sm fade" id="my-modal-id" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
-    <div class="modal-dialog modal-dialog-centered">
-      <div class="modal-content">
-        <div class="modal-header">
-          <h1 class="modal-title h5" id="exampleModalLabel">${title}</h1>
-          <button type="button" class="btn-close" data-dismiss="modal" aria-label="Close">
-            <i class="icon-ui-close"></i>
-          </button>
-          <p class="modal-subtitle">${subtitle}</p>
-        </div>
-        <div class="modal-body">
-          <div class="form-control">
-            <label for="input-text-name" autofocus>Company name</label>
-            <input id="input-text-name" type="text" />
-          </div>
-        </div>
-        <div class="modal-footer">
-          <button class="btn danger outline" data-dismiss="modal">Back</button>
-          <button class="btn primary" data-dismiss="modal">Payment detail</button>
-        </div>
+  <div id="content-related">
+    <div class="card" id="recent-actions">
+      <div>
+        {% phosphor 'archive' 'ph-bold' %}
+        <h2 class="card-title">
+          {% translate 'My recent actions' %}
+        </h2>
+        <a href="#" class="btn primary outline">{% translate 'Show all' %}</a>
       </div>
+      <div class="card-body">
+        {% load log %}
+        {% get_admin_log 10 as admin_log for_user user %}
+        {% if not admin_log %}
+          <p>{% translate 'None available' %}</p>
+        {% else %}
+          <ul class="actionlist">
+            {% for entry in admin_log %}
+              <li class="{% if entry.is_addition %}add{% elif entry.is_change %}edit{% elif entry.is_deletion %}delete{% endif %}">
+                {% if entry.is_deletion or not entry.get_admin_url %}
+                  <span class="action-entry">
+                {% else %}
+                  <a class="action-entry" href="{{ entry.get_admin_url }}">
+                {% endif %}
+                <span class="icon">
+                  {% if entry.is_addition %}
+                    {% phosphor 'plus' 'ph-bold' %}
+                  {% elif entry.is_change %}
+                    {% phosphor 'pencil-simple' 'ph-bold' %}
+                  {% elif entry.is_deletion %}
+                    {% phosphor 'trash-simple' 'ph-bold' %}
+                  {% endif %}
+                </span>
+                <span class="content-description">
+                  <span class="fill-text">
+                    {{ entry.object_repr }}
+                  </span>
+                  {% if entry.content_type %}
+                    <div class="content-title">
+                      <span class="mini quiet">{% filter capfirst %}{{ entry.content_type.name }}{% endfilter %}</span>
+                    </div>
+                  {% endif %}
+                </span>
+                {% if entry.is_deletion or not entry.get_admin_url %}
+                  </span>
+                {% else %}
+                  </a>
+                {% endif %}
+              </li>
+            {% endfor %}
+          </ul>
+        </div>
+      {% endif %}
     </div>
   </div>
-
-  <button class="btn primary" data-toggle="modal" data-target="#my-modal-id">Open</button>
-
 {% endblock %}

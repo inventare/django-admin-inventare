@@ -9,8 +9,6 @@ class AdminSite(admin.AdminSite):
     login_form = AuthenticationForm
 
     def get_urls(self) -> list[URLResolver]:
-        print("OIE?")
-
         def wrap(view, cacheable=False):
             def wrapper(*args, **kwargs):
                 return self.admin_view(view, cacheable)(*args, **kwargs)
