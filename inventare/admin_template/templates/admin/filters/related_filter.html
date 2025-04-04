@@ -1,13 +1,8 @@
-{% load inventare_ds %}
+{% load i18n inventare_ds %}
 <div class="form-control">
   <div
     class="select-container"
     id="{{ spec.lookup_kwarg }}"
-    hx-post="./table/"
-    hx-target="#changelist"
-    hx-swap="outerHTML"
-    hx-trigger="selected"
-    hx-indicator="#changelist-indicator"
   >
     <input
       class="default-control"
@@ -31,8 +26,22 @@
       hx-indicator="#{{ spec.lookup_kwarg }}_ddinner .htmx-indicator"
       hx-swap="innerHTML"
     >
-      <div class="select-dropdown-inner" id="{{ spec.lookup_kwarg }}_ddinner">
-        {% include 'admin/autocomplete/autocomplete_indicator.html' %}
+      <div class="select-dropdown-inner">
+        <div class="select-dropdown-search">
+          <input
+            type="text"
+            placeholder="{% translate 'Search...' %}"
+            name="term"
+            hx-get="{% url 'admin:htmx-autocomplete' %}?app_label={{ spec.model_admin.opts.app_label }}&model_name={{ spec.model_admin.opts.model_name }}&field_name={{ spec.field.name }}"
+            hx-trigger="input changed delay:500ms, keyup[key=='Enter']"
+            hx-target="#{{ spec.lookup_kwarg }}_ddinner"
+            hx-indicator="#{{ spec.lookup_kwarg }}_ddinner .htmx-indicator"
+            form="termFakeForm"
+          >
+        </div>
+        <div class="select-dropdown-inner" id="{{ spec.lookup_kwarg }}_ddinner">
+          {% include 'admin/autocomplete/autocomplete_indicator.html' %}
+        </div>
       </div>
     </div>
   </div>

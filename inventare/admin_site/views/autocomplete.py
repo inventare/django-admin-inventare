@@ -41,6 +41,7 @@ class HTMXAutocompleteView(BaseListView):
             'model_name': self.model_name,
             'field_name': self.field_name,
         }
+        print(context)
         return TemplateResponse(
             request,
             self.template_name or "admin/autocomplete/autocomplete_list.html",

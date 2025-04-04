@@ -59,11 +59,19 @@
           hx-target="#changelist"
           hx-swap="outerHTML"
           hx-indicator="#changelist-indicator"
-        >{% csrf_token %}
+        >
+          {% csrf_token %}
           {% block search %}{% search_form cl %}{% endblock %}
-
+      
           {% if cl.has_filters %}
-            {% for spec in cl.filter_specs %}{% admin_list_filter cl spec %}{% endfor %}
+            <button
+              class="btn primary {% if not cl.has_active_filters %}outline{% endif %}"
+              data-toggle="modal"
+              data-target="#filters-sheet"
+              type="button"
+            >
+              {% translate 'Filter' %}
+            </button>
           {% endif %}
           
           {% if cl.has_active_filters %}
@@ -75,6 +83,43 @@
           {% endif %}
         </form>
       </nav>
+
+      {% if cl.has_filters %}
+        <div class="sheet-right modal modal-md fade" id="filters-sheet" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+          <div class="modal-dialog sheet-dialog">
+            <div class="modal-content">
+              <div class="modal-header">
+                <h1 class="modal-title h5" id="exampleModalLabel">{% translate 'Filters' %}</h1>
+                <button type="button" class="btn-close" data-dismiss="modal" aria-label="{% translate 'Close' %}">
+                  <i class="icon-ui-close"></i>
+                </button>
+                <p class="modal-subtitle">{% translate 'Apply filters' %}</p>
+              </div>
+              <div class="modal-body">
+                <form
+                  id="filters-sheet-form"
+                  hx-post="./table/"
+                  hx-target="#changelist"
+                  hx-swap="outerHTML"
+                  hx-indicator="#changelist-indicator"
+                >
+                  {% csrf_token %}
+
+                  {% for spec in cl.filter_specs %}
+                    {% admin_list_filter cl spec %}
+                  {% endfor %}
+                </form>
+              </div>
+              <div class="modal-footer">
+                <button class="btn danger outline" data-dismiss="modal">{% translate 'Close' %}</button>
+                <button type="submit" form="filters-sheet-form" class="btn primary" data-dismiss="modal">
+                  {% translate 'Apply' %}
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      {% endif %}
     {% endblock %}
 
     {% if cl.formset and cl.formset.errors %}
@@ -83,7 +128,7 @@
       </p>
       {{ cl.formset.non_form_errors }}
     {% endif %}
-      
+
     <div class="htmx-indicator" id="changelist-indicator">
       Carregando...
     </div>
@@ -92,4 +137,5 @@
       {% include 'admin/change_list_table.html' %}
     {% endblock %}
   </div>
+  <form id="termFakeForm"></form>
 {% endblock %}
