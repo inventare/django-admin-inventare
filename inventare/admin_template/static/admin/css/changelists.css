@@ -1,11 +1,16 @@
+/* TODO: refactor this */
+
 #changelist-filter {
   margin: 20px 0;
-}
 
-#changelist-filter form {
-  display: grid;
-  grid-template-columns: repeat(4, 1fr);
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+  align-items: center;
   gap: 16px;
+}
+#changelist-filter .fit {
+  flex: 1;
 }
 
 .autocomplete-skeleton-container {
@@ -54,4 +59,63 @@
 }
 .htmx-request.htmx-indicator{
   display:inline;
+}
+
+.filter-sheet-grid {
+  display: flex;
+  flex-direction: column;
+  align-items: stretch;
+  gap: var(--spacing-small);
+}
+.filter-sheet-grid .select-label {
+  text-transform: capitalize;
+}
+
+
+#changelist-form .results > table,
+#changelist-form .results > table tr,
+#changelist-form .results > table td,
+#changelist-form .results > table th {
+  border: none;
+  border-collapse: collapse;
+}
+
+#changelist-form .results > table {
+  width: 100%;
+}
+#changelist-form .results > table > thead {
+  background-color: #ccc;
+}
+#changelist-form .results > table > thead tr th {
+  padding: var(--spacing-small) var(--spacing-small);
+  text-align: left;
+}
+#changelist-form .results > table > thead tr th,
+#changelist-form .results > table > thead tr th a {
+  color: #222;
+  font-weight: normal;
+  text-decoration: none;
+}
+#changelist-form .results > table > thead tr th.action-checkbox-column {
+  text-align: center;
+  width: 30px;
+}
+
+
+#changelist-form .results > table > tbody tr td,
+#changelist-form .results > table > tbody tr th {
+  padding: var(--spacing-small) var(--spacing-small);
+  text-align: left;
+}
+
+#changelist-form .results > table > tbody tr td.action-checkbox {
+  width: 30px;
+  text-align: center;
+}
+
+#changelist-form .results > table > tbody tr td a,
+#changelist-form .results > table > tbody tr th a {
+  font-weight: normal;
+  text-decoration: none;
+  color: #222;
 }

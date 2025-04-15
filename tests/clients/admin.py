@@ -25,5 +25,10 @@ class ClientAdmin(ModelAdmin):
     list_editable = ['name', 'is_usable']
     search_fields = ['name']
     date_hierarchy = 'birth_date'
+    
+    fieldsets = [
+        ("Dados Pessoais", { 'fields': ['name', 'birth_date'], 'classes': 'cols-2' }),
+        ("Sistema", { 'fields': ['is_usable'] })
+    ]
 
     inlines = [ClientPhoneInlineAdmin]

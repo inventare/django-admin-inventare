@@ -44,11 +44,7 @@
 
 {% block coltype %}{% endblock %}
 
-{% block object-tools %}
-  {% block object-tools-items %}
-    {% change_list_object_tools %}
-  {% endblock %}
-{% endblock %}
+{% block object-tools %}{% endblock %}
 
 {% block content %}
   <div id="content-main">
@@ -62,26 +58,34 @@
         >
           {% csrf_token %}
           {% block search %}{% search_form cl %}{% endblock %}
-      
-          {% if cl.has_filters %}
-            <button
-              class="btn primary {% if not cl.has_active_filters %}outline{% endif %}"
-              data-toggle="modal"
-              data-target="#filters-sheet"
-              type="button"
-            >
-              {% translate 'Filter' %}
-            </button>
-          {% endif %}
-          
-          {% if cl.has_active_filters %}
-            <div id="changelist-filter-extra-actions">
-              <h3>
-                <a href="{{ cl.clear_all_filters_qs }}">&#10006; {% translate "Clear all filters" %}</a>
-              </h3>
-            </div>
-          {% endif %}
         </form>
+      
+        {% if cl.has_filters %}
+          <button
+            class="btn primary {% if not cl.has_active_filters %}outline{% endif %}"
+            data-toggle="modal"
+            data-target="#filters-sheet"
+            type="button"
+          >
+            {% translate 'Filter' %}
+          </button>
+        {% endif %}
+
+        {% if cl.has_active_filters %}
+          <div id="changelist-filter-extra-actions">
+            <h3>
+              <a href="{{ cl.clear_all_filters_qs }}">&#10006; {% translate "Clear all filters" %}</a>
+            </h3>
+          </div>
+        {% endif %}
+
+        <div class="fit"></div>
+
+        <div class="object-tools">
+          {% block object-tools-items %}
+            {% change_list_object_tools %}
+          {% endblock %}
+        </div>
       </nav>
 
       {% if cl.has_filters %}
@@ -95,7 +99,7 @@
                 </button>
                 <p class="modal-subtitle">{% translate 'Apply filters' %}</p>
               </div>
-              <div class="modal-body">
+              <div class="modal-body" style="position: unset;">
                 <form
                   id="filters-sheet-form"
                   hx-post="./table/"
@@ -105,9 +109,11 @@
                 >
                   {% csrf_token %}
 
-                  {% for spec in cl.filter_specs %}
-                    {% admin_list_filter cl spec %}
-                  {% endfor %}
+                  <div class="filter-sheet-grid">
+                    {% for spec in cl.filter_specs %}
+                      {% admin_list_filter cl spec %}
+                    {% endfor %}
+                  </div>
                 </form>
               </div>
               <div class="modal-footer">

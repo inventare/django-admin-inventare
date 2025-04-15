@@ -1,7 +1,7 @@
 {% load inventare_ds %}
 <div class="form-control">
   <div
-    class="select-container"
+    class="select-container select-fixed-fit"
     id="{{ spec.lookup_kwarg }}"
   >
     <input
@@ -11,27 +11,45 @@
       value="{% if not spec.lookup_val2 %}{% if spec.lookup_val %}{{ spec.lookup_val }}{% endif %}{% else %}null{% endif %}"
     />
 
-    <div class="select input" role="combobox" tabindex="0" aria-haspopup="true" aria-expanded="false" aria-disabled="false" aria-controls="select-display">
+    <div
+      class="select input select-filter-style"
+      role="combobox"
+      tabindex="0"
+      aria-haspopup="true"
+      aria-expanded="false"
+      aria-disabled="false"
+      aria-controls="select-display"
+    >
+      <span class="select-label">{{ spec.title }}</span>
       <span class="select-value" role="textbox" aria-readonly="true" id="select-display">
         {% get_active_display choices %}
       </span>
       <button type="button" class="dropdown-button" role="presentation">
-        <i class="icon-caret-down arrow" role="presentation"></i>
+        <i class="icon-caret-right arrow" role="presentation"></i>
       </button>
     </div>
 
-    <div class="select-dropdown">
+    <div class="select-dropdown select-dropdown-fixed-fit">
       <div class="select-dropdown-inner">
-        {% for choice in choices %}
-          <button
-            data-value="{{ choice.value }}"
-            class="select-item {% if choice.selected %}active{% endif %}"
-            type="button"
-            {% if choice.inline_display %} data-display="{{ choice.inline_display }}"{% endif %}
-          >
-            {{ choice.display }}
+        <header>
+          <button type="button" class="close-button">
+            <i class="icon-caret-left"></i>
+            {{ spec.title }}
           </button>
-        {% endfor %}
+        </header>
+
+        <div class="select-dropdown-items">
+          {% for choice in choices %}
+            <button
+              data-value="{{ choice.value }}"
+              class="select-item {% if choice.selected %}active{% endif %}"
+              type="button"
+              {% if choice.inline_display %} data-display="{{ choice.inline_display }}"{% endif %}
+            >
+              {{ choice.display }}
+            </button>
+          {% endfor %}
+        </div>
       </div>
     </div>
   </div>

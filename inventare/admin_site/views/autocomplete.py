@@ -41,7 +41,6 @@ class HTMXAutocompleteView(BaseListView):
             'model_name': self.model_name,
             'field_name': self.field_name,
         }
-        print(context)
         return TemplateResponse(
             request,
             self.template_name or "admin/autocomplete/autocomplete_list.html",
@@ -95,10 +94,17 @@ class HTMXAutocompleteView(BaseListView):
         except LookupError as e:
             raise PermissionDenied from e
 
-        try:
-            source_field = source_model._meta.get_field(self.field_name)
-        except FieldDoesNotExist as e:
-            raise PermissionDenied from e
+        field_name_parts = str(self.field_name).split('__')
+        for field_name in field_name_parts:
+            try:
+                source_field = source_model._meta.get_field(field_name)
+            except FieldDoesNotExist as e:
+                raise PermissionDenied from e
+            try:
+                source_model = source_field.remote_field.model
+            except AttributeError as e:
+                raise PermissionDenied from e
+
         try:
             remote_model = source_field.remote_field.model
         except AttributeError as e:

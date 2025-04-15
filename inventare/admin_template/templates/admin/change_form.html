@@ -68,9 +68,9 @@
 {% endif %}
 
 {% block field_sets %}
-{% for fieldset in adminform %}
-  {% include "admin/forms/fieldset.html" with heading_level=2 id_suffix=forloop.counter0 %}
-{% endfor %}
+  {% for fieldset in adminform %}
+    {% include "admin/forms/fieldset.html" with heading_level=2 id_suffix=forloop.counter0 %}
+  {% endfor %}
 {% endblock %}
 
 {% block after_field_sets %}{% endblock %}

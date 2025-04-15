@@ -1,0 +1,18 @@
+fieldset {
+  margin: var(--spacing-large) 0;
+}
+
+.submit-row {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  
+  gap: var(--spacing-small);
+  padding-top: var(--spacing-small);
+  padding-bottom: var(--spacing-small);
+  margin-top: var(--spacing-medium);
+  margin-bottom: var(--spacing-xgiant);
+}
+.submit-row .fill {
+  flex: 1;
+}

@@ -7,8 +7,8 @@ class Address(models.Model):
         return self.street
     
     class Meta:
-        verbose_name = 'address'
-        verbose_name_plural = 'addresses'
+        verbose_name = 'Address'
+        verbose_name_plural = 'Addresses'
 
 class Client(models.Model):
     name = models.CharField(max_length=250, help_text='the client name')
@@ -21,8 +21,8 @@ class Client(models.Model):
         return self.name
     
     class Meta:
-        verbose_name = 'client'
-        verbose_name_plural = 'clients'
+        verbose_name = 'Client'
+        verbose_name_plural = 'Clients'
 
 class ClientPhone(models.Model):
     client = models.ForeignKey(Client, on_delete=models.CASCADE)
@@ -32,5 +32,5 @@ class ClientPhone(models.Model):
         return self.phone
     
     class Meta:
-        verbose_name = 'client phone'
-        verbose_name_plural = 'client phones'
+        verbose_name = 'Client Phone'
+        verbose_name_plural = 'Client Phones'
