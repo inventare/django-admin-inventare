@@ -1,4 +1,4 @@
-{% load i18n static remote_url %}<!DOCTYPE html>
+{% load i18n static remote_url inventare_ds %}<!DOCTYPE html>
 {% get_current_language as LANGUAGE_CODE %}{% get_current_language_bidi as LANGUAGE_BIDI %}
 <html lang="{{ LANGUAGE_CODE|default:"en-us" }}" dir="{{ LANGUAGE_BIDI|yesno:'rtl,ltr,auto' }}">
 <head>
@@ -32,42 +32,44 @@
         <!-- Header -->
         {% block header %}
           <header id="header">
-            <div id="branding">
-              {% block branding %}{% endblock %}
+            <div class="menu white">
+              <ul>
+                {% block nav-global %}{% endblock %}
+                <div style="flex: 1"></div>
+                {% block usertools %}
+                  {% if has_permission %}
+                    <li>
+                      <div class="dropdown">
+                        <button
+                          class="btn dropdown-toggle"
+                          type="button"
+                          data-toggle="dropdown"
+                          aria-expanded="false"
+                        >
+                          <span class="avatar medium">{% avatar_tag request.user %}</span>
+                        </button>
+                        <ul class="dropdown-menu dropdown-menu-end primary">
+                          {% if site_url %}
+                            <li><a class="dropdown-item" href="{{ site_url }}">{% translate 'View site' %}</a></li>
+                          {% endif %}
+                          {% if user.is_active and user.is_staff %}
+                            {% url 'django-admindocs-docroot' as docsroot %}
+                            {% if docsroot %}
+                            <li><a class="dropdown-item" href="{{ docsroot }}">{% translate 'Documentation' %}</a></li>
+                            {% endif %}
+                          {% endif %}
+                          {% block userlinks %}
+                            {% if user.has_usable_password %}
+                              <li><a class="dropdown-item" href="{% url 'admin:password_change' %}">{% translate 'Change password' %}</a></li>
+                            {% endif %}
+                          {% endblock %}
+                        </ul>
+                      </div>
+                    </li>
+                  {% endif %}
+                {% endblock %}
+              </ul>
             </div>
-            {% block usertools %}
-              {% if has_permission %}
-              <div id="user-tools">
-                <div class="dropdown">
-                  <button
-                    class="btn primary dropdown-toggle"
-                    type="button"
-                    data-toggle="dropdown"
-                    aria-expanded="false"
-                  >
-                    {% firstof user.get_short_name user.get_username %}
-                  </button>
-                  <ul class="dropdown-menu primary">
-                    {% if site_url %}
-                      <li><a class="dropdown-item" href="{{ site_url }}">{% translate 'View site' %}</a></li>
-                    {% endif %}
-                    {% if user.is_active and user.is_staff %}
-                      {% url 'django-admindocs-docroot' as docsroot %}
-                      {% if docsroot %}
-                      <li><a class="dropdown-item" href="{{ docsroot }}">{% translate 'Documentation' %}</a></li>
-                      {% endif %}
-                    {% endif %}
-                    {% block userlinks %}
-                      {% if user.has_usable_password %}
-                        <li><a class="dropdown-item" href="{% url 'admin:password_change' %}">{% translate 'Change password' %}</a></li>
-                      {% endif %}
-                    {% endblock %}
-                  </ul>
-                </div>
-              </div>
-              {% endif %}
-            {% endblock %}
-            {% block nav-global %}{% endblock %}
           </header>
         {% endblock %}
         <!-- END Header -->

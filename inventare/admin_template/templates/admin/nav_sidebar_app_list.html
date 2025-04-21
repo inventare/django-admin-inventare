@@ -16,7 +16,7 @@
         {% is_route_on_admin_app app request as is_admin_expanded %}
         <button
           type="button"
-          class="btn btn-sidebar primary dropdown {% if is_admin_expanded %} active{% endif %}"
+          class="btn btn-sidebar primary expandable {% if is_admin_expanded %} active{% endif %}"
           data-toggle="collapse"
           data-target="#sidebar-{{ app.app_label }}"
           aria-expanded="{% if is_admin_expanded %}true{% else %}false{% endif %}"

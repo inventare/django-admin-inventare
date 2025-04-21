@@ -7,6 +7,7 @@ from django.http import HttpRequest
 from django.utils.translation import gettext_lazy as _
 from django.contrib.admin.views.main import PAGE_VAR
 from django.utils.safestring import mark_safe
+from django.conf import settings
 
 register = template.Library()
 
@@ -91,3 +92,42 @@ def get_error_message(field: AdminField):
         return None
     errors = list(field.field.errors)
     return errors[0]
+
+@register.simple_tag
+def avatar_tag(user):
+    name = 'Anonymous'
+    if user:
+        name = user.get_full_name()
+        if not name:
+            name = user.get_username()
+    if not name:
+        name = 'Anonymous'
+
+    name = name.upper()
+
+    splited_names = list(filter(lambda x: bool(x), name.split(' ')))
+    if not splited_names:
+        splited_names=  ['ANONYMOUS']
+        
+    photo_url = None
+    if hasattr(settings, 'USER_PHOTO_FIELD'):
+        photo_field = settings.USER_PHOTO_FIELD
+        if photo_field and hasattr(user, photo_field):
+            photo_user_field = getattr(user, photo_field)
+            if photo_user_field and hasattr(photo_user_field, 'url'):
+                photo_url = photo_user_field.url
+
+    if photo_url:
+        return format_html(
+            '<img class="avatar medium" alt="{}" src="{}" loading="lazy" />',
+            name,
+            photo_url,
+        )
+
+    initial = splited_names[0][0]
+    if len(splited_names) > 1:
+        initial = f"{initial}{splited_names[-1][0]}"
+    
+    return format_html(
+        '<span class="avatar medium">{}</span>', initial
+    )
