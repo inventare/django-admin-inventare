@@ -1,4 +1,4 @@
-{% load i18n static remote_url inventare_ds %}<!DOCTYPE html>
+{% load i18n static remote_url inventare_ds phosphoricons %}<!DOCTYPE html>
 {% get_current_language as LANGUAGE_CODE %}{% get_current_language_bidi as LANGUAGE_BIDI %}
 <html lang="{{ LANGUAGE_CODE|default:"en-us" }}" dir="{{ LANGUAGE_BIDI|yesno:'rtl,ltr,auto' }}">
 <head>
@@ -27,96 +27,111 @@
       {% endblock %}
     {% endif %}
     
-    <main id="content-start" class="content" tabindex="-1" style="flex: 1; overflow-y: auto">
+    <main id="content-start" class="content" tabindex="-1" style="flex: 1; overflow: hidden; display: flex; flex-direction: column; align-items: stretch;">
       {% if not is_popup %}
         <!-- Header -->
         {% block header %}
-          <header id="header">
-            <div class="menu white">
-              <ul>
-                {% block nav-global %}{% endblock %}
-                <div style="flex: 1"></div>
-                {% block usertools %}
-                  {% if has_permission %}
-                    <li>
-                      <div class="dropdown">
-                        <button
-                          class="btn dropdown-toggle"
-                          type="button"
-                          data-toggle="dropdown"
-                          aria-expanded="false"
-                        >
-                          <span class="avatar medium">{% avatar_tag request.user %}</span>
-                        </button>
-                        <ul class="dropdown-menu dropdown-menu-end primary">
-                          {% if site_url %}
-                            <li><a class="dropdown-item" href="{{ site_url }}">{% translate 'View site' %}</a></li>
-                          {% endif %}
-                          {% if user.is_active and user.is_staff %}
-                            {% url 'django-admindocs-docroot' as docsroot %}
-                            {% if docsroot %}
-                            <li><a class="dropdown-item" href="{{ docsroot }}">{% translate 'Documentation' %}</a></li>
+          <header id="header" style="position: relative;">
+            <div class="menu-container" id="menu-container" style="position: sticky; left: 0; top: 0; right: 0;">
+              <nav class="menu primary" style="flex: 1">
+                <ul>
+                  <li>
+                    <button
+                      data-toggle="sidebar"
+                      data-target="#nav-sidebar"
+                      aria-expanded="true"
+                      aria-label="{% translate 'Toggle navigation' %}"
+                      class="btn primary"
+                    >
+                      {% phosphor 'list' 'ph-bold' %}
+                    </button>
+                  </li>
+                  {% block nav-global %}{% endblock %}
+                  <div style="flex: 1"></div>
+                  {% block usertools %}
+                    {% if has_permission %}
+                      <li>
+                        <div class="dropdown">
+                          <button
+                            class="btn dropdown-toggle"
+                            type="button"
+                            data-toggle="dropdown"
+                            aria-expanded="false"
+                          >
+                            <span class="avatar medium">{% avatar_tag request.user %}</span>
+                          </button>
+                          <ul class="dropdown-menu dropdown-menu-end primary">
+                            {% if site_url %}
+                              <li><a class="dropdown-item" href="{{ site_url }}">{% translate 'View site' %}</a></li>
                             {% endif %}
-                          {% endif %}
-                          {% block userlinks %}
-                            {% if user.has_usable_password %}
-                              <li><a class="dropdown-item" href="{% url 'admin:password_change' %}">{% translate 'Change password' %}</a></li>
+                            {% if user.is_active and user.is_staff %}
+                              {% url 'django-admindocs-docroot' as docsroot %}
+                              {% if docsroot %}
+                              <li><a class="dropdown-item" href="{{ docsroot }}">{% translate 'Documentation' %}</a></li>
+                              {% endif %}
                             {% endif %}
-                          {% endblock %}
-                        </ul>
-                      </div>
-                    </li>
-                  {% endif %}
-                {% endblock %}
-              </ul>
+                            {% block userlinks %}
+                              {% if user.has_usable_password %}
+                                <li><a class="dropdown-item" href="{% url 'admin:password_change' %}">{% translate 'Change password' %}</a></li>
+                              {% endif %}
+                            {% endblock %}
+                          </ul>
+                        </div>
+                      </li>
+                    {% endif %}
+                  {% endblock %}
+                </ul>
+              </nav>
             </div>
           </header>
         {% endblock %}
         <!-- END Header -->
       {% endif %}
       
-      <div class="{% block container_class %}container{% endblock %}">
-        {% if not is_popup %}
-          {% block nav-breadcrumbs %}
-            <nav aria-label="{% translate 'Breadcrumbs' %}">
-              {% block breadcrumbs %}
-                <div class="breadcrumbs">
-                  <a href="{% url 'admin:index' %}">{% translate 'Home' %}</a>
-                  {% if title %} &rsaquo; {{ title }}{% endif %}
-                </div>
-              {% endblock %}
-            </nav>
-          {% endblock %}
-        {% endif %}
-
-        {% block messages %}
-          {% if messages %}
-            {% for message in messages %}
-              <div class="alert {{ message.tags }}" role="alert">{{ message|capfirst }}</div>
-            {% endfor %}
-          {% endif %}
-        {% endblock messages %}
-
-        <!-- Content -->
-        <div id="content" class="{% block coltype %}colM{% endblock %}">
-          <div class="title-block">
-            <div class="title-lines">
-              {% block pretitle %}{% endblock %}
-              {% block content_title %}{% if title %}<h1>{{ title }}</h1>{% endif %}{% endblock %}
-              {% block content_subtitle %}{% if subtitle %}<h2>{{ subtitle }}</h2>{% endif %}{% endblock %}
-            </div>
-            <div class="object-tools">
-              {% block object-tools %}{% endblock %}
-            </div>
-          </div>
-          <div id="content-row">
-            {% block content %}
-              {{ content }}
+      <div style="flex: 1; overflow-y: auto">
+        <div class="{% block container_class %}container{% endblock %}">
+          {% if not is_popup %}
+            {% block nav-breadcrumbs %}
+              <nav aria-label="{% translate 'Breadcrumbs' %}">
+                {% block breadcrumbs %}
+                  <div class="breadcrumbs">
+                    <a href="{% url 'admin:index' %}">{% translate 'Home' %}</a>
+                    {% if title %} &rsaquo; {{ title }}{% endif %}
+                  </div>
+                {% endblock %}
+              </nav>
             {% endblock %}
-            {% block sidebar %}{% endblock %}
+          {% endif %}
+
+          {% block messages %}
+            {% if messages %}
+              {% for message in messages %}
+                <div class="alert {{ message.tags }}" role="alert">{{ message|capfirst }}</div>
+              {% endfor %}
+            {% endif %}
+          {% endblock messages %}
+
+          <!-- Content -->
+          <div id="content" class="{% block coltype %}colM{% endblock %}">
+            <div class="title-block">
+              <div class="title-lines">
+                {% block pretitle %}{% endblock %}
+                {% block content_title %}{% if title %}<h1>{{ title }}</h1>{% endif %}{% endblock %}
+                {% block content_subtitle %}{% if subtitle %}<h2>{{ subtitle }}</h2>{% endif %}{% endblock %}
+              </div>
+              <div class="object-tools">
+                {% block object-tools %}{% endblock %}
+              </div>
+            </div>
+            <div id="content-row">
+              {% block content %}
+                {{ content }}
+              {% endblock %}
+              {% block sidebar %}{% endblock %}
+            </div>
           </div>
+          <!-- END Content -->
         </div>
-        <!-- END Content -->
       </div>
     </main>
   </div>
